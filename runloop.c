@@ -1150,21 +1150,19 @@ static bool validate_game_specific_options(char **output)
 static bool validate_folder_options(
       char *s, size_t len, bool mkdir)
 {
-   char folder_name[DIR_MAX_LENGTH];
-   runloop_state_t *runloop_st = &runloop_state;
-   const char *core_name       = runloop_st->system.info.library_name;
    const char *game_path       = path_get(RARCH_PATH_BASENAME);
 
-   folder_name[0] = '\0';
-
-   if (string_is_empty(game_path))
-      return false;
-
-   fill_pathname_parent_dir_name(folder_name,
-         game_path, sizeof(folder_name));
-
-   return validate_per_core_options(s, len, mkdir,
-         core_name, folder_name);
+   if (!string_is_empty(game_path))
+   {
+      char folder_name[DIR_MAX_LENGTH];
+      runloop_state_t *runloop_st = &runloop_state;
+      const char *core_name       = runloop_st->system.info.library_name;
+      fill_pathname_parent_dir_name(folder_name,
+            game_path, sizeof(folder_name));
+      return validate_per_core_options(s, len, mkdir,
+            core_name, folder_name);
+   }
+   return false;
 }
 
 
@@ -4171,10 +4169,9 @@ static bool runloop_path_init_subsystem(runloop_state_t *runloop_st)
             ext[  _len]  = '.';
             ext[++_len]  = '\0';
             strlcpy(ext + _len, mem->extension, sizeof(ext) - _len);
-            strlcpy(savename,
-                  runloop_st->subsystem_fullpaths->elems[i].data,
+            fill_pathname(savename,
+                  runloop_st->subsystem_fullpaths->elems[i].data, "",
                   sizeof(savename));
-            path_remove_extension(savename);
 
             if (path_is_directory(savefile_dir))
             {
@@ -8206,8 +8203,7 @@ void runloop_path_set_special(char **argv, unsigned num_content)
    for (i = 0; i < num_content; i++)
    {
       string_list_append(runloop_st->subsystem_fullpaths, argv[i], attr);
-      strlcpy(str, argv[i], sizeof(str));
-      path_remove_extension(str);
+      fill_pathname(str, argv[i], "", sizeof(str));
       string_list_append(&subsystem_paths, path_basename(str), attr);
    }
 

@@ -1581,8 +1581,8 @@ int generic_action_ok_displaylist_push(
                   settings->paths.path_content_database,
                   path, sizeof(tmp));
 
-            fill_pathname_base(lpl_basename, path, sizeof(lpl_basename));
-            path_remove_extension(lpl_basename);
+            fill_pathname(lpl_basename, path_basename(path), "",
+                  sizeof(lpl_basename));
             menu_driver_set_thumbnail_system(
                   menu_st->userdata, lpl_basename, sizeof(lpl_basename));
 
@@ -2058,7 +2058,8 @@ static int file_load_with_detect_core_wrapper(
                sizeof(new_core_path)))
          ret = -1;
 
-      if (     !is_carchive && !string_is_empty(path)
+      if (     !is_carchive
+            && !string_is_empty(path)
             && !string_is_empty(menu_path_new))
          fill_pathname_join_special(menu->detect_content_path,
                menu_path_new, path,
@@ -2123,7 +2124,7 @@ static int action_ok_file_load_with_detect_core_carchive(
          menu->detect_content_path, path,
          '#', sizeof(menu->detect_content_path));
 
-   type = 0;
+   type  = 0;
    label = NULL;
 
    return file_load_with_detect_core_wrapper(
@@ -2137,11 +2138,11 @@ static int action_ok_file_load_with_detect_core(const char *path,
    bool is_dir = (entry_idx == FILE_TYPE_USE_DIRECTORY
          && string_is_equal(label,
                   msg_hash_to_str(MENU_ENUM_LABEL_USE_THIS_DIRECTORY)));
-   if (is_dir) path = NULL;
+   if (is_dir)
+      path     = NULL;
 
-   type  = 0;
-   label = NULL;
-
+   type        = 0;
+   label       = NULL;
    return file_load_with_detect_core_wrapper(
          MSG_UNKNOWN, idx, entry_idx,
          path, label, type, false);
@@ -3682,7 +3683,6 @@ static int generic_action_ok_remap_file_operation(const char *path,
       unsigned action_type)
 {
 #ifdef HAVE_CONFIGFILE
-   char content_dir_name[DIR_MAX_LENGTH];
    char remap_file_path[PATH_MAX_LENGTH];
    struct menu_state *menu_st             = menu_state_get_ptr();
    rarch_system_info_t *sys_info          = &runloop_state_get_ptr()->system;
@@ -3699,7 +3699,6 @@ static int generic_action_ok_remap_file_operation(const char *path,
    size_t remap_path_total_len            = 0;
    size_t _len                            = 0;
 
-   content_dir_name[0] = '\0';
    remap_file_path[0]  = '\0';
 
    /* Cannot perform remap file operation if we
@@ -3767,9 +3766,9 @@ static int generic_action_ok_remap_file_operation(const char *path,
       case ACTION_OK_REMAP_FILE_REMOVE_CONTENT_DIR:
          if (has_content)
          {
+            char content_dir_name[DIR_MAX_LENGTH];
             fill_pathname_parent_dir_name(content_dir_name,
                   rarch_path_basename, sizeof(content_dir_name));
-
             fill_pathname_join_special_ext(remap_file_path,
                   directory_input_remapping, remap_path,
                   content_dir_name,
@@ -8598,12 +8597,9 @@ static int action_ok_playlist_refresh(const char *path,
          case MANUAL_CONTENT_SCAN_PLAYLIST_REFRESH_INVALID_SYSTEM_NAME:
             {
                const char *playlist_file = NULL;
-
                if ((playlist_file = path_basename(playlist_config->path)))
-               {
-                  strlcpy(system_name, playlist_file, sizeof(system_name));
-                  path_remove_extension(system_name);
-               }
+                  fill_pathname(system_name, playlist_file, "",
+                        sizeof(system_name));
                else
                   system_name[0] = '\0';
 

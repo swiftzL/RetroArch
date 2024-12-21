@@ -126,7 +126,7 @@ static path_change_data_t *file_change_data = NULL;
  * out_path is filled with the absolute path
  **/
 static void fill_pathname_expanded_and_absolute(
-      char *out_path, size_t out_size,
+      char *out_path, size_t out_len,
       const char *in_refpath,
       const char *in_path)
 {
@@ -140,10 +140,10 @@ static void fill_pathname_expanded_and_absolute(
 
    /* Resolve the reference path relative to the config */
    if (path_is_absolute(expanded_path))
-      strlcpy(out_path, expanded_path, out_size);
+      strlcpy(out_path, expanded_path, out_len);
    else
       fill_pathname_resolve_relative(out_path, in_refpath,
-            in_path, out_size);
+            in_path, out_len);
 
    pathname_conform_slashes_to_os(out_path);
 }
@@ -151,7 +151,7 @@ static void fill_pathname_expanded_and_absolute(
 /**
  * video_shader_replace_wildcards:
  *
- * @param inout_absolute_path
+ * @param s
  * Absolute path to replace wildcards in
  *
  * @param in_preset_path
@@ -230,16 +230,15 @@ static void fill_pathname_expanded_and_absolute(
  * after replacing the wildcards does not exist on disk,
  * the path returned will be uneffected.
  **/
-static void video_shader_replace_wildcards(char *inout_absolute_path,
-      const unsigned in_absolute_path_length, char *in_preset_path)
+static void video_shader_replace_wildcards(char *s, size_t len, char *in_preset_path)
 {
    int i = 0;
    char replaced_path[PATH_MAX_LENGTH];
 
-   if (!strstr(inout_absolute_path, RARCH_WILDCARD_DELIMITER))
+   if (!strstr(s, RARCH_WILDCARD_DELIMITER))
       return;
 
-   strlcpy(replaced_path, inout_absolute_path, sizeof(replaced_path));
+   strlcpy(replaced_path, s, sizeof(replaced_path));
 
    /* Step through the wildcards while we can still find the
     * delimiter in the replaced path
@@ -263,14 +262,12 @@ static void video_shader_replace_wildcards(char *inout_absolute_path,
                            rarch_path_basename,
                            sizeof(content_dir_name));
                   if (string_is_not_equal_fast(content_dir_name, "", sizeof("")))
-                     strlcpy(content_dir_name,
-                           path_basename_nocompression(content_dir_name),
+                     fill_pathname(content_dir_name,
+                           path_basename_nocompression(content_dir_name), "",
                            sizeof(content_dir_name));
-                  if (string_is_not_equal_fast(content_dir_name, "", sizeof("")))
-                     path_remove_extension(content_dir_name);
 
                   if (string_is_not_equal_fast(content_dir_name, "", sizeof("")))
-                     replace_len = strlcpy(replace_text, content_dir_name, sizeof(replace_text));
+                     replace_len     = strlcpy(replace_text, content_dir_name, sizeof(replace_text));
                   else
                      replace_text[0] = '\0';
                }
@@ -380,11 +377,10 @@ static void video_shader_replace_wildcards(char *inout_absolute_path,
                   char preset_dir_name[DIR_MAX_LENGTH];
                   fill_pathname_parent_dir_name(preset_dir_name, in_preset_path, sizeof(preset_dir_name));
                   if (string_is_not_equal_fast(preset_dir_name, "", sizeof("")))
-                     strlcpy(preset_dir_name, path_basename_nocompression(preset_dir_name), sizeof(preset_dir_name));
+                     fill_pathname(preset_dir_name, path_basename_nocompression(preset_dir_name),
+                           "", sizeof(preset_dir_name));
                   if (string_is_not_equal_fast(preset_dir_name, "", sizeof("")))
-                     path_remove_extension(preset_dir_name);
-                  if (string_is_not_equal_fast(preset_dir_name, "", sizeof("")))
-                     replace_len = strlcpy(replace_text, preset_dir_name, sizeof(replace_text));
+                     replace_len     = strlcpy(replace_text, preset_dir_name, sizeof(replace_text));
                   else
                      replace_text[0] = '\0';
                }
@@ -392,11 +388,11 @@ static void video_shader_replace_wildcards(char *inout_absolute_path,
             case RARCH_WILDCARD_PRESET:
                {
                   char preset_name[NAME_MAX_LENGTH];
-                  strlcpy(preset_name, path_basename_nocompression(in_preset_path), sizeof(preset_name));
+                  fill_pathname(preset_name,
+                        path_basename_nocompression(in_preset_path), "",
+                        sizeof(preset_name));
                   if (string_is_not_equal_fast(preset_name, "", sizeof("")))
-                     path_remove_extension(preset_name);
-                  if (string_is_not_equal_fast(preset_name, "", sizeof("")))
-                     replace_len = strlcpy(replace_text, preset_name, sizeof(replace_text));
+                     replace_len     = strlcpy(replace_text, preset_name, sizeof(replace_text));
                   else
                      replace_text[0] = '\0';
                }
@@ -440,7 +436,7 @@ static void video_shader_replace_wildcards(char *inout_absolute_path,
    }
 
    if (path_is_valid(replaced_path))
-      strlcpy(inout_absolute_path, replaced_path, in_absolute_path_length);
+      strlcpy(s, replaced_path, len);
    else
    {
       /* If a file does not exist at the location of the replaced path
@@ -448,7 +444,7 @@ static void video_shader_replace_wildcards(char *inout_absolute_path,
       RARCH_DBG("\n[Shaders]: Filepath after wildcard replacement can't be found:\n");
       RARCH_DBG("                \"%s\" \n", replaced_path);
       RARCH_DBG("           Falling back to original Filepath\n");
-      RARCH_DBG("                \"%s\" \n\n", inout_absolute_path);
+      RARCH_DBG("                \"%s\" \n\n", s);
    }
 }
 
@@ -2329,7 +2325,9 @@ bool video_shader_load_preset_into_shader(const char *path,
 #endif
 
    /* Gather all the paths of all of the presets in all reference chains */
-   override_paths_list = path_linked_list_new();
+   override_paths_list = (struct path_linked_list*)malloc(sizeof(*override_paths_list));
+   override_paths_list->next = NULL;
+   override_paths_list->path = NULL;
    video_shader_gather_reference_path_list(override_paths_list, conf->path, 0);
 
    /*

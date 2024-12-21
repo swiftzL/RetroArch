@@ -1594,7 +1594,7 @@ static int16_t input_state_device(
                         res = ((   input_st->turbo_btns.count
                                  % settings->uints.input_turbo_period)
                               < settings->uints.input_turbo_duty_cycle);
-                  }  
+                  }
                }
             }
          }
@@ -5323,7 +5323,7 @@ static const char *input_overlay_path(bool want_osk)
    /* maybe based on the content's directory name */
    if (!string_is_empty(content_path))
    {
-      char dirname[PATH_MAX_LENGTH];
+      char dirname[DIR_MAX_LENGTH];
       fill_pathname_parent_dir_name(dirname, content_path, sizeof(dirname));
       fill_pathname_join_special_ext(system_overlay_path,
             overlay_directory, SYSTEM_OVERLAY_DIR, dirname, ".cfg",
@@ -7462,8 +7462,12 @@ void input_keyboard_event(bool down, unsigned code,
        * - not with Game Focus
        * - not from keyboard device type mappings
        * - not from overlay keyboard input
-       * - with 'enable_hotkey' modifier set and unpressed. */
-      if (     !input_st->game_focus_state.enabled
+       * - with 'enable_hotkey' modifier set and unpressed.
+       *
+       * Also do not block key up events, because keys will
+       * get stuck if Game Focus key is also pressing a key. */
+      if (     down
+            && !input_st->game_focus_state.enabled
             && BIT512_GET(input_st->keyboard_mapping_bits, code)
             && device != RETRO_DEVICE_POINTER)
       {

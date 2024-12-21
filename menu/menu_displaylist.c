@@ -2252,59 +2252,183 @@ static unsigned menu_displaylist_parse_system_info(file_list_t *list)
          bool enabled;
          enum msg_hash_enums msg;
       } info_list[] = {
+#ifdef HAVE_LIBRETRODB
          {SUPPORTS_LIBRETRODB, MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_LIBRETRODB_SUPPORT},
+#endif
+#ifdef HAVE_OVERLAY
          {SUPPORTS_OVERLAY,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_OVERLAY_SUPPORT},
+#endif
+#ifdef HAVE_COMMAND
          {SUPPORTS_COMMAND,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_COMMAND_IFACE_SUPPORT},
+#endif
+#ifdef HAVE_NETWORK_CMD
          {SUPPORTS_NETWORK_COMMAND,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_NETWORK_COMMAND_IFACE_SUPPORT},
+#endif
+#ifdef HAVE_NETWORKGAMEPAD
          {SUPPORTS_NETWORK_GAMEPAD,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_NETWORK_REMOTE_SUPPORT},
+#endif
+#ifdef HAVE_COCOA
          {SUPPORTS_COCOA          ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_COCOA_SUPPORT},
+#endif
+#ifdef HAVE_RPNG
          {SUPPORTS_RPNG        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_RPNG_SUPPORT},
+#endif
+#ifdef HAVE_RJPEG
          {SUPPORTS_RJPEG       ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_RJPEG_SUPPORT},
+#endif
+#ifdef HAVE_RBMP
          {SUPPORTS_RBMP        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_RBMP_SUPPORT},
+#endif
+#ifdef HAVE_RTGA
          {SUPPORTS_RTGA        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_RTGA_SUPPORT},
+#endif
+#ifdef HAVE_SDL
          {SUPPORTS_SDL         ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_SDL_SUPPORT},
+#endif
+#ifdef HAVE_SDL2
          {SUPPORTS_SDL2        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_SDL2_SUPPORT},
+#endif
+#ifdef HAVE_GDI
+         {SUPPORTS_GDI         ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_GDI_SUPPORT},
+#endif
+#ifdef HAVE_D3D8
+         {SUPPORTS_D3D8        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_D3D8_SUPPORT},
+#endif
+#ifdef HAVE_D3D9
+         {SUPPORTS_D3D9        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_D3D9_SUPPORT},
+#endif
+#ifdef HAVE_D3D10
+         {SUPPORTS_D3D10       ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_D3D10_SUPPORT},
+#endif
+#ifdef HAVE_D3D11
+         {SUPPORTS_D3D11       ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_D3D11_SUPPORT},
+#endif
+#ifdef HAVE_D3D12
+         {SUPPORTS_D3D12       ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_D3D12_SUPPORT},
+#endif
+#ifdef HAVE_VULKAN
          {SUPPORTS_VULKAN      ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_VULKAN_SUPPORT},
+#endif
+#ifdef HAVE_METAL
          {SUPPORTS_METAL       ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_METAL_SUPPORT},
+#endif
          {SUPPORTS_OPENGL      ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_OPENGL_SUPPORT},
          {SUPPORTS_OPENGLES    ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_OPENGLES_SUPPORT},
+#ifdef HAVE_THREADS
          {SUPPORTS_THREAD      ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_THREADING_SUPPORT},
+#endif
+#ifdef HAVE_KMS
          {SUPPORTS_KMS         ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_KMS_SUPPORT},
+#endif
+#ifdef HAVE_UDEV
          {SUPPORTS_UDEV        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_UDEV_SUPPORT},
+#endif
+#ifdef HAVE_VG
          {SUPPORTS_VG          ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_OPENVG_SUPPORT},
+#endif
+#ifdef HAVE_EGL
          {SUPPORTS_EGL         ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_EGL_SUPPORT},
+#endif
+#ifdef HAVE_X11
          {SUPPORTS_X11         ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_X11_SUPPORT},
+#endif
+#ifdef HAVE_WAYLAND
          {SUPPORTS_WAYLAND     ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_WAYLAND_SUPPORT},
+#endif
+#ifdef HAVE_XVIDEO
          {SUPPORTS_XVIDEO      ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_XVIDEO_SUPPORT},
+#endif
+#ifdef HAVE_ALSA
          {SUPPORTS_ALSA        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_ALSA_SUPPORT},
+#endif
+#ifdef HAVE_OSS
          {SUPPORTS_OSS         ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_OSS_SUPPORT},
+#endif
+#ifdef HAVE_AL
          {SUPPORTS_AL          ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_OPENAL_SUPPORT},
+#endif
+#ifdef HAVE_SL
          {SUPPORTS_SL          ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_OPENSL_SUPPORT},
+#endif
+#ifdef HAVE_RSOUND
          {SUPPORTS_RSOUND      ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_RSOUND_SUPPORT},
+#endif
+#ifdef HAVE_ROAR
          {SUPPORTS_ROAR        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_ROARAUDIO_SUPPORT},
+#endif
+#ifdef HAVE_JACK
          {SUPPORTS_JACK        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_JACK_SUPPORT},
+#endif
+#ifdef HAVE_PULSE
          {SUPPORTS_PULSE       ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_PULSEAUDIO_SUPPORT},
+#endif
+#ifdef HAVE_COREAUDIO
          {SUPPORTS_COREAUDIO   ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_COREAUDIO_SUPPORT},
+#endif
+#ifdef HAVE_COREAUDIO3
          {SUPPORTS_COREAUDIO3  ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_COREAUDIO3_SUPPORT},
+#endif
+#ifdef HAVE_PIPEWIRE
+         {SUPPORTS_PIPEWIRE    ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_PIPEWIRE_SUPPORT},
+#endif
+#ifdef HAVE_DSOUND
          {SUPPORTS_DSOUND      ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_DSOUND_SUPPORT},
+#endif
+#ifdef HAVE_WASAPI
          {SUPPORTS_WASAPI      ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_WASAPI_SUPPORT},
+#endif
+#ifdef HAVE_XAUDIO
          {SUPPORTS_XAUDIO      ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_XAUDIO2_SUPPORT},
+#endif
+#ifdef HAVE_ZLIB
          {SUPPORTS_ZLIB        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_ZLIB_SUPPORT},
+#endif
+#ifdef HAVE_7ZIP
          {SUPPORTS_7ZIP        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_7ZIP_SUPPORT},
+#endif
+#ifdef HAVE_DYLIB
          {SUPPORTS_DYLIB       ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_DYLIB_SUPPORT},
+#endif
          {SUPPORTS_DYNAMIC     ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_DYNAMIC_SUPPORT},
+#ifdef HAVE_CG
          {SUPPORTS_CG          ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_CG_SUPPORT},
+#endif
+#ifdef HAVE_GLSL
          {SUPPORTS_GLSL        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_GLSL_SUPPORT},
+#endif
+#ifdef HAVE_HLSL
          {SUPPORTS_HLSL        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_HLSL_SUPPORT},
+#endif
+#ifdef HAVE_SLANG
+         {SUPPORTS_SLANG       ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_SLANG_SUPPORT},
+#endif
+#ifdef HAVE_SDL_IMAGE
          {SUPPORTS_SDL_IMAGE   ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_SDL_IMAGE_SUPPORT},
+#endif
+#ifdef HAVE_FFMPEG
          {SUPPORTS_FFMPEG      ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_FFMPEG_SUPPORT},
+#endif
+#ifdef HAVE_MPV
          {SUPPORTS_MPV         ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_MPV_SUPPORT},
+#endif
+#ifdef HAVE_CORETEXT
          {SUPPORTS_CORETEXT    ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_CORETEXT_SUPPORT},
+#endif
+#ifdef HAVE_FREETYPE
          {SUPPORTS_FREETYPE    ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_FREETYPE_SUPPORT},
+#endif
+#ifdef HAVE_STB_FONT
          {SUPPORTS_STBFONT     ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_STB_TRUETYPE_SUPPORT},
+#endif
+#ifdef HAVE_NETWORKING
          {SUPPORTS_NETPLAY     ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_NETPLAY_SUPPORT},
+#endif
+#ifdef HAVE_V4L2
          {SUPPORTS_V4L2        ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_V4L2_SUPPORT},
+#endif
+#ifdef HAVE_LIBUSB
          {SUPPORTS_LIBUSB      ,    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_LIBUSB_SUPPORT},
+#endif
       };
       unsigned info_idx;
       const char *val_yes_str = msg_hash_to_str(MENU_ENUM_LABEL_VALUE_YES);
@@ -2399,8 +2523,8 @@ static int menu_displaylist_parse_playlist(
       else if (!string_is_empty(info_path))
       {
          char lpl_basename[NAME_MAX_LENGTH];
-         fill_pathname_base(lpl_basename, info_path, sizeof(lpl_basename));
-         path_remove_extension(lpl_basename);
+         fill_pathname(lpl_basename, path_basename(info_path), "",
+               sizeof(lpl_basename));
          menu_driver_set_thumbnail_system(
                menu_st->userdata, lpl_basename, sizeof(lpl_basename));
       }
@@ -2661,7 +2785,6 @@ static int menu_displaylist_parse_database_entry(menu_handle_t *menu,
 
    fill_pathname(path_base, path_basename(info->path), "",
          sizeof(path_base));
-   path_remove_extension(path_base);
 
    menu_driver_set_thumbnail_system(
          menu_st->userdata, path_base, sizeof(path_base));
@@ -3525,8 +3648,8 @@ static int menu_displaylist_parse_horizontal_list(
 
          /* Thumbnail system must be set *after* playlist
           * is loaded/cached */
-         fill_pathname_base(lpl_basename, item->path, sizeof(lpl_basename));
-         path_remove_extension(lpl_basename);
+         fill_pathname(lpl_basename, path_basename(item->path), "",
+               sizeof(lpl_basename));
          menu_driver_set_thumbnail_system(
                menu_st->userdata, lpl_basename, sizeof(lpl_basename));
       }
@@ -4657,8 +4780,8 @@ static unsigned menu_displaylist_parse_add_to_playlist_list(
                || string_is_equal(playlist_file, FILE_PATH_CONTENT_FAVORITES))
             continue;
 
-         strlcpy(playlist_display_name, playlist_file, sizeof(playlist_display_name));
-         path_remove_extension(playlist_display_name);
+         fill_pathname(playlist_display_name, playlist_file, "",
+               sizeof(playlist_display_name));
 
          menu_entries_append(list, playlist_display_name, path,
                MENU_ENUM_LABEL_ADD_ENTRY_TO_PLAYLIST,
@@ -4920,8 +5043,7 @@ static unsigned menu_displaylist_parse_pl_thumbnail_download_list(
                   "lpl"))
             continue;
 
-         strlcpy(path_base, path, sizeof(path_base));
-         path_remove_extension(path_base);
+         fill_pathname(path_base, path, "", sizeof(path_base));
 
          menu_entries_append(list, path_base, path,
                MENU_ENUM_LABEL_PL_THUMBNAILS_UPDATER_ENTRY,
@@ -5013,12 +5135,9 @@ static unsigned menu_displaylist_parse_content_information(
 
          if (!string_is_empty(entry->label))
             strlcpy(content_label, entry->label, sizeof(content_label));
-         else if (!string_is_empty(content_path))
-         {
-            /* Create content label from the path */
-            strlcpy(content_label, path_basename(content_path), sizeof(content_label));
-            path_remove_extension(content_label);
-         }
+         else if (!string_is_empty(content_path)) /* Create content label from the path */
+            fill_pathname(content_label, path_basename(content_path), "",
+                  sizeof(content_label));
 
          /* Only display core name if both core name and
           * core path are valid */
@@ -5037,8 +5156,8 @@ static unsigned menu_displaylist_parse_content_information(
       core_path      = loaded_core_path;
 
       /* Create content label from the path */
-      strlcpy(content_label, path_basename(content_path), sizeof(content_label));
-      path_remove_extension(content_label);
+      fill_pathname(content_label, path_basename(content_path), "",
+            sizeof(content_label));
 
       if (core_info_find(core_path, &core_info))
       {
@@ -5076,15 +5195,11 @@ static unsigned menu_displaylist_parse_content_information(
    /* Database */
    if (!string_is_empty(db_name))
    {
-      char *db_name_no_ext = NULL;
       char db_name_no_ext_buff[NAME_MAX_LENGTH];
-      /* Remove .lpl extension
-      * > path_remove_extension() requires a char * (not const)
-      *   so have to use a temporary buffer... */
-      strlcpy(db_name_no_ext_buff, db_name, sizeof(db_name_no_ext_buff));
-      db_name_no_ext = path_remove_extension(db_name_no_ext_buff);
+      fill_pathname(db_name_no_ext_buff, db_name, "",
+            sizeof(db_name_no_ext_buff));
 
-      if (!string_is_empty(db_name_no_ext))
+      if (!string_is_empty(db_name_no_ext_buff))
       {
          size_t _len = strlcpy(tmp,
                msg_hash_to_str(MENU_ENUM_LABEL_VALUE_CONTENT_INFO_DATABASE),
@@ -5092,7 +5207,7 @@ static unsigned menu_displaylist_parse_content_information(
          tmp[  _len] = ':';
          tmp[++_len] = ' ';
          tmp[++_len] = '\0';
-         strlcpy(tmp + _len, db_name_no_ext, sizeof(tmp) - _len);
+         strlcpy(tmp + _len, db_name_no_ext_buff, sizeof(tmp) - _len);
          if (menu_entries_append(info_list, tmp,
                msg_hash_to_str(MENU_ENUM_LABEL_CONTENT_INFO_DATABASE),
                MENU_ENUM_LABEL_CONTENT_INFO_DATABASE,
@@ -6322,7 +6437,7 @@ static unsigned populate_playlist_thumbnail_mode_dropdown_list(
                   : MENU_SETTING_DROPDOWN_ITEM_PLAYLIST_LEFT_THUMBNAIL_MODE;
 
       /* Loop over all thumbnail modes */
-      for (i = 0; i <= (unsigned)PLAYLIST_THUMBNAIL_MODE_BOXARTS; i++)
+      for (i = 0; i <= (unsigned)PLAYLIST_THUMBNAIL_MODE_LOGOS; i++)
       {
          enum msg_hash_enums label_value;
          enum playlist_thumbnail_mode thumbnail_mode =
@@ -6342,6 +6457,9 @@ static unsigned populate_playlist_thumbnail_mode_dropdown_list(
                break;
             case PLAYLIST_THUMBNAIL_MODE_BOXARTS:
                label_value = MENU_ENUM_LABEL_VALUE_THUMBNAIL_MODE_BOXARTS;
+               break;
+            case PLAYLIST_THUMBNAIL_MODE_LOGOS:
+               label_value = MENU_ENUM_LABEL_VALUE_THUMBNAIL_MODE_LOGOS;
                break;
             default:
                /* PLAYLIST_THUMBNAIL_MODE_DEFAULT */
@@ -6852,7 +6970,6 @@ unsigned menu_displaylist_build_list(
       case DISPLAYLIST_OPTIONS_OVERRIDES:
          {
             char config_directory[DIR_MAX_LENGTH];
-            char content_dir_name[DIR_MAX_LENGTH];
             char override_path[PATH_MAX_LENGTH];
             runloop_state_t *runloop_st      = runloop_state_get_ptr();
             rarch_system_info_t *sys_info    = &runloop_st->system;
@@ -6865,7 +6982,6 @@ unsigned menu_displaylist_build_list(
             bool game_override_remove        = false;
 
             config_directory[0]              = '\0';
-            content_dir_name[0]              = '\0';
             override_path[0]                 = '\0';
 
             fill_pathname_application_special(config_directory,
@@ -6874,6 +6990,8 @@ unsigned menu_displaylist_build_list(
 
             if (has_content)
             {
+               char content_dir_name[DIR_MAX_LENGTH];
+
                /* Game-specific path */
                fill_pathname_join_special_ext(override_path,
                      config_directory, core_name,

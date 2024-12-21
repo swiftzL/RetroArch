@@ -132,6 +132,9 @@ audio_driver_t *audio_drivers[] = {
 #ifdef HAVE_PULSE
    &audio_pulse,
 #endif
+#ifdef HAVE_PIPEWIRE
+   &audio_pipewire,
+#endif
 #if defined(__PSL1GHT__) || defined(__PS3__)
    &audio_ps3,
 #endif
@@ -1404,8 +1407,8 @@ void audio_driver_load_system_sounds(void)
       if (audio_driver_mixer_extension_supported(ext))
       {
          basename_noext[0] = '\0';
-         fill_pathname_base(basename_noext, path, sizeof(basename_noext));
-         path_remove_extension(basename_noext);
+         fill_pathname(basename_noext, path_basename(path), "",
+               sizeof(basename_noext));
 
          if (string_is_equal_noncase(basename_noext, "ok"))
             path_ok = path;
