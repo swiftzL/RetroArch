@@ -8276,7 +8276,6 @@ char* get_core_options(void)
     int o = 0;
     for (int i=0; i<runloop_st->core_options->size; i++) {
         size_t opt_idx;
-        size_t val_idx1;
         struct core_option *option = (struct core_option*)&runloop_st->core_options->opts[i];
 
         if (core_option_manager_get_idx(runloop_st->core_options, option->key, &opt_idx)) {
@@ -8287,7 +8286,6 @@ char* get_core_options(void)
             size += strlen(core_option_manager_get_val(runloop_st->core_options, opt_idx));
             int w = 0;
             for (int j=0; j<option->vals->size; j++) {
-                size_t val_idx;
                 if (w>0) size++;
                 size += strlen(option->vals->elems[j].data);
                 w++;
@@ -8300,7 +8298,6 @@ char* get_core_options(void)
 
     for (int i=0; i<runloop_st->core_options->size; i++) {
         size_t opt_idx;
-        size_t val_idx1;
         struct core_option *option = (struct core_option*)&runloop_st->core_options->opts[i];
 
         if (core_option_manager_get_idx(runloop_st->core_options, option->key, &opt_idx)) {
@@ -8312,7 +8309,6 @@ char* get_core_options(void)
             strcat(rv, "; ");
             int w = 0;
             for (int j=0; j<option->vals->size; j++) {
-                size_t val_idx;
                 if (w>0) strcat(rv, "|");
                 strcat(rv, option->vals->elems[j].data);
                 w++;
@@ -8337,6 +8333,8 @@ void set_video_rotation(int rotation)
       unsigned base_width              = 0;
       unsigned base_height             = 0;
       struct retro_game_geometry *geom = (struct retro_game_geometry*)&av_info->geometry;
+      sys_info->core_requested_rotation = rotation;
+      sys_info->rotation = rotation;
       video_driver_set_rotation(rotation);
       video_driver_get_viewport_info(&vp);
       custom_vp->x         = 0;
