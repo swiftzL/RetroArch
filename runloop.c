@@ -8333,9 +8333,11 @@ void set_video_rotation(int rotation)
       unsigned base_width              = 0;
       unsigned base_height             = 0;
       struct retro_game_geometry *geom = (struct retro_game_geometry*)&av_info->geometry;
-      sys_info->core_requested_rotation = rotation;
-      sys_info->rotation = rotation;
-      video_driver_set_rotation(rotation);
+      int core_rotation = sys_info->core_requested_rotation;
+      int new_rotation = 0;
+      new_rotation = rotation + core_rotation;
+      if (new_rotation > 3) new_rotation = 0;
+      video_driver_set_rotation(new_rotation);
       video_driver_get_viewport_info(&vp);
       custom_vp->x         = 0;
       custom_vp->y         = 0;
