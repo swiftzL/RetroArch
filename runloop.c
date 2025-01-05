@@ -8123,15 +8123,31 @@ void runloop_path_set_redirect(settings_t *settings,
 
       if (savefile_is_dir)
       {
+#ifdef __EMSCRIPTEN__
+       char *ext = (char*)EM_ASM_PTR({
+           try {
+              return stringToNewUTF8(Module.getSavExt());
+          } catch(e) {
+              return stringToNewUTF8(".srm");
+          }
+       });
+#endif
          fill_pathname_dir(runloop_st->name.savefile,
                            !string_is_empty(runloop_st->runtime_content_path_basename)
                            ? runloop_st->runtime_content_path_basename
                            : sysinfo->library_name,
+#ifdef __EMSCRIPTEN__
+                           ext,
+#else
                            FILE_PATH_SRM_EXTENSION,
+#endif
                            sizeof(runloop_st->name.savefile));
          RARCH_LOG("[Overrides]: %s \"%s\".\n",
                    msg_hash_to_str(MSG_REDIRECTING_SAVEFILE_TO),
                    runloop_st->name.savefile);
+#ifdef __EMSCRIPTEN__
+       free(ext);
+#endif
       }
 
       if (savestate_is_dir)
