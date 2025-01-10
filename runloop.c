@@ -8352,7 +8352,7 @@ void set_video_rotation(int rotation)
       int core_rotation = sys_info->core_requested_rotation;
       int new_rotation = 0;
       new_rotation = rotation + core_rotation;
-      if (new_rotation > 3) new_rotation = 0;
+      if (new_rotation > 3) new_rotation -= 4;
       video_driver_set_rotation(new_rotation);
       video_driver_get_viewport_info(&vp);
       custom_vp->x         = 0;
