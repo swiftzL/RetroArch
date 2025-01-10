@@ -166,12 +166,12 @@ task_finished:
 
    if (http->handle)
    {
-      size_t len = 0;
-      char  *tmp = (char*)net_http_data(http->handle, &len, false);
+      size_t _len = 0;
+      char   *tmp = (char*)net_http_data(http->handle, &_len, false);
       struct string_list *headers = net_http_headers(http->handle);
 
       if (!tmp)
-         tmp = (char*)net_http_data(http->handle, &len, true);
+         tmp = (char*)net_http_data(http->handle, &_len, true);
 
       if ((flg & RETRO_TASK_FLG_CANCELLED) > 0)
       {
@@ -188,7 +188,7 @@ task_finished:
          data          = (http_transfer_data_t*)malloc(sizeof(*data));
          data->data    = tmp;
          data->headers = headers;
-         data->len     = len;
+         data->len     = _len;
          data->status  = net_http_status(http->handle);
 
          task_set_data(task, data);
@@ -199,9 +199,9 @@ task_finished:
             task_set_error(task, strldup("Download failed.",
                sizeof("Download failed.")));
       }
-
       net_http_delete(http->handle);
-   } else if (http->error)
+   }
+   else if (http->error)
       task_set_error(task, strldup("Internal error.",
                sizeof("Internal error.")));
 
@@ -408,9 +408,9 @@ void *task_push_webdav_move(const char *url,
       const char *dest, bool mute, const char *headers,
       retro_task_callback_t cb, void *userdata)
 {
+   size_t _len;
    struct http_connection_t *conn;
    char dest_header[PATH_MAX_LENGTH + 512];
-   size_t len;
 
    if (string_is_empty(url))
       return NULL;
@@ -418,12 +418,12 @@ void *task_push_webdav_move(const char *url,
    if (!(conn = net_http_connection_new(url, "MOVE", NULL)))
       return NULL;
 
-   len = strlcpy(dest_header, "Destination: ", sizeof(dest_header));
-   len += strlcpy(dest_header + len, dest, sizeof(dest_header) - len);
-   len += strlcpy(dest_header + len, "\r\n", sizeof(dest_header) - len);
+   _len  = strlcpy(dest_header, "Destination: ", sizeof(dest_header));
+   _len += strlcpy(dest_header + _len, dest,   sizeof(dest_header) - _len);
+   _len += strlcpy(dest_header + _len, "\r\n", sizeof(dest_header) - _len);
 
    if (headers)
-      strlcpy(dest_header + len, headers, sizeof(dest_header) - len);
+      strlcpy(dest_header + _len, headers, sizeof(dest_header) - _len);
 
    net_http_connection_set_headers(conn, dest_header);
 
@@ -434,7 +434,7 @@ void* task_push_http_transfer_file(const char* url, bool mute,
       const char* type,
       retro_task_callback_t cb, file_transfer_t* transfer_data)
 {
-   size_t len;
+   size_t _len;
    const char *s               = NULL;
    char tmp[NAME_MAX_LENGTH]   = "";
    retro_task_t *t             = NULL;
@@ -449,19 +449,19 @@ void* task_push_http_transfer_file(const char* url, bool mute,
       return NULL;
 
    if (transfer_data)
-      s       = transfer_data->path;
+      s        = transfer_data->path;
    else
-      s       = url;
+      s        = url;
 
-   len        = strlcpy(tmp, msg_hash_to_str(MSG_DOWNLOADING), sizeof(tmp));
-   tmp[  len] = ' ';
-   tmp[++len] = '\0';
+   _len        = strlcpy(tmp, msg_hash_to_str(MSG_DOWNLOADING), sizeof(tmp));
+   tmp[  _len] = ' ';
+   tmp[++_len] = '\0';
 
    if (string_ends_with_size(s, ".index",
             strlen(s), STRLEN_CONST(".index")))
       s       = msg_hash_to_str(MSG_INDEX_FILE);
 
-   strlcpy(tmp + len, s, sizeof(tmp) - len);
+   strlcpy(tmp + _len, s, sizeof(tmp) - _len);
 
    t->title = strdup(tmp);
    return t;

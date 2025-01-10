@@ -99,7 +99,7 @@ struct gfx_widget_load_content_animation_state
    char content_name[512];
    char system_name[512];
    char icon_directory[DIR_MAX_LENGTH];
-   char icon_file[PATH_MAX_LENGTH];
+   char icon_file[NAME_MAX_LENGTH];
 
    bool has_icon;
 };
@@ -445,11 +445,10 @@ bool gfx_widget_start_load_content_animation(void)
     * > Use db_name, if available */
    if (has_db_name)
    {
-      size_t len = strlcpy(state->icon_file, state->system_name,
-            sizeof(state->icon_file));
-      strlcpy(state->icon_file       + len,
+      fill_pathname(state->icon_file,
+            state->system_name,
             ".png",
-            sizeof(state->icon_file) - len);
+            sizeof(state->icon_file));
 
       fill_pathname_join_special(icon_path,
             state->icon_directory, state->icon_file,
@@ -470,18 +469,17 @@ bool gfx_widget_start_load_content_animation(void)
 
       /* We can only use the core db_name if the
        * core is associated with exactly one database */
-      if (databases_list &&
-          (databases_list->size == 1))
+      if (    databases_list
+          && (databases_list->size == 1))
          core_db_name = databases_list->elems[0].data;
 
       if (   !string_is_empty(core_db_name)
           && !string_is_equal(core_db_name, state->system_name))
       {
-         size_t len = strlcpy(state->icon_file, core_db_name,
-               sizeof(state->icon_file));
-         strlcpy(state->icon_file       + len,
+         fill_pathname(state->icon_file,
+               core_db_name,
                ".png",
-               sizeof(state->icon_file) - len);
+               sizeof(state->icon_file));
 
          fill_pathname_join_special(icon_path,
                state->icon_directory, state->icon_file,
@@ -582,8 +580,9 @@ static void gfx_widget_load_content_animation_layout(
       state->system_name_width  = (system_name_width > 0) ?
             (unsigned)system_name_width : 0;
 
-      text_width = (state->content_name_width > state->system_name_width) ?
-            (int)state->content_name_width : (int)state->system_name_width;
+      text_width = (state->content_name_width > state->system_name_width)
+            ? (int)state->content_name_width
+            : (int)state->system_name_width;
 
       /* Now we have the text width, can determine
        * final icon/text x draw positions */
@@ -639,8 +638,9 @@ static void gfx_widget_load_content_animation_iterate(void *user_data,
       state->system_name_width  = (system_name_width > 0) ?
             (unsigned)system_name_width : 0;
 
-      text_width = (state->content_name_width > state->system_name_width) ?
-            (int)state->content_name_width : (int)state->system_name_width;
+      text_width = (state->content_name_width > state->system_name_width)
+         ? (int)state->content_name_width
+         : (int)state->system_name_width;
 
       /* Now we have the text width, can determine
        * final icon/text x draw positions */

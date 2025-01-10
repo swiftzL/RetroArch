@@ -256,24 +256,15 @@ static int16_t sdl_input_state(
       case RARCH_DEVICE_POINTER_SCREEN:
          if (idx == 0)
          {
-            struct video_viewport vp;
+            video_viewport_t vp         = {0};
             bool screen                 = device ==
                RARCH_DEVICE_POINTER_SCREEN;
-            const int edge_detect       = 32700;
-            bool inside                 = false;
             int16_t res_x               = 0;
             int16_t res_y               = 0;
             int16_t res_screen_x        = 0;
             int16_t res_screen_y        = 0;
 
-            vp.x                        = 0;
-            vp.y                        = 0;
-            vp.width                    = 0;
-            vp.height                   = 0;
-            vp.full_width               = 0;
-            vp.full_height              = 0;
-
-            if (video_driver_translate_coord_viewport_wrap(
+            if (video_driver_translate_coord_viewport_confined_wrap(
                         &vp, sdl->mouse_abs_x, sdl->mouse_abs_y,
                         &res_x, &res_y, &res_screen_x, &res_screen_y))
             {
@@ -283,11 +274,6 @@ static int16_t sdl_input_state(
                   res_y = res_screen_y;
                }
 
-               inside =    (res_x >= -edge_detect)
-                  && (res_y >= -edge_detect)
-                  && (res_x <= edge_detect)
-                  && (res_y <= edge_detect);
-
                switch (id)
                {
                   case RETRO_DEVICE_ID_POINTER_X:
@@ -296,33 +282,50 @@ static int16_t sdl_input_state(
                      return res_y;
                   case RETRO_DEVICE_ID_POINTER_PRESSED:
                      return sdl->mouse_l;
-                  case RETRO_DEVICE_ID_LIGHTGUN_IS_OFFSCREEN:
-                     return !inside;
+                  case RETRO_DEVICE_ID_POINTER_IS_OFFSCREEN:
+                     return input_driver_pointer_is_offscreen(res_x, res_y);
                }
             }
          }
          break;
       case RETRO_DEVICE_KEYBOARD:
          return (id && id < RETROK_LAST) && sdl_key_pressed(id);
+      /* TODO: update button binds to match other input drivers */
       case RETRO_DEVICE_LIGHTGUN:
+      {
+         video_viewport_t vp         = {0};
+         int16_t res_x               = 0;
+         int16_t res_y               = 0;
+         int16_t res_screen_x        = 0;
+         int16_t res_screen_y        = 0;
+
+         if (video_driver_translate_coord_viewport_wrap(
+                     &vp, sdl->mouse_abs_x, sdl->mouse_abs_y,
+                     &res_x, &res_y, &res_screen_x, &res_screen_y))
+
          switch (id)
          {
+            case RETRO_DEVICE_ID_LIGHTGUN_SCREEN_X:
+               return res_x;
+            case RETRO_DEVICE_ID_LIGHTGUN_SCREEN_Y:
+               return res_y;
+            case RETRO_DEVICE_ID_LIGHTGUN_IS_OFFSCREEN:
+               return input_driver_pointer_is_offscreen(res_x, res_y);
             case RETRO_DEVICE_ID_LIGHTGUN_X:
                return sdl->mouse_x;
             case RETRO_DEVICE_ID_LIGHTGUN_Y:
                return sdl->mouse_y;
             case RETRO_DEVICE_ID_LIGHTGUN_TRIGGER:
                return sdl->mouse_l;
-            case RETRO_DEVICE_ID_LIGHTGUN_CURSOR:
+            case RETRO_DEVICE_ID_LIGHTGUN_RELOAD:
                return sdl->mouse_m;
-            case RETRO_DEVICE_ID_LIGHTGUN_TURBO:
-               return sdl->mouse_r;
             case RETRO_DEVICE_ID_LIGHTGUN_START:
-               return sdl->mouse_m && sdl->mouse_r;
-            case RETRO_DEVICE_ID_LIGHTGUN_PAUSE:
-               return sdl->mouse_m && sdl->mouse_l;
+               return sdl->mouse_r;
+            case RETRO_DEVICE_ID_LIGHTGUN_SELECT:
+               return sdl->mouse_l && sdl->mouse_r;
          }
          break;
+      }
    }
 
    return 0;

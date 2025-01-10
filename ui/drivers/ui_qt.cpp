@@ -2454,6 +2454,7 @@ QVector<QHash<QString, QString> > MainWindow::getCoreInfo()
 
    if (core_info->firmware_count > 0)
    {
+      char tmp_path[PATH_MAX_LENGTH];
       core_info_ctx_firmware_t firmware_info;
       bool update_missing_firmware    = false;
       bool set_missing_firmware       = false;
@@ -2461,7 +2462,6 @@ QVector<QHash<QString, QString> > MainWindow::getCoreInfo()
       uint8_t flags                   = content_get_flags();
       bool systemfiles_in_content_dir = settings->bools.systemfiles_in_content_dir;
       bool content_is_inited          = flags & CONTENT_ST_FLAG_IS_INITED;
-      char tmp_path[PATH_MAX_LENGTH];
 
       firmware_info.path             = core_info->path;
 
@@ -2469,22 +2469,23 @@ QVector<QHash<QString, QString> > MainWindow::getCoreInfo()
        * adjust the path to check for firmware files */
       if (systemfiles_in_content_dir && content_is_inited)
       {
-         strlcpy(tmp_path, path_get(RARCH_PATH_CONTENT), sizeof(tmp_path));
-         path_basedir(tmp_path);
+         fill_pathname_basedir(tmp_path,
+               path_get(RARCH_PATH_CONTENT),
+               sizeof(tmp_path));
 
          /* If content path is empty, fall back to global system dir path */
          if (string_is_empty(tmp_path))
             firmware_info.directory.system = settings->paths.directory_system;
          else
          {
-            size_t len = strlen(tmp_path);
+            size_t _len = strlen(tmp_path);
 
             /* Removes trailing slash (unless root dir), doesn't really matter
              * but it's more consistent with how the path is stored and
              * displayed without 'System Files are in Content Directory' */
             if (     string_count_occurrences_single_character(tmp_path, PATH_DEFAULT_SLASH_C()) > 1
-                  && tmp_path[len - 1] == PATH_DEFAULT_SLASH_C())
-               tmp_path[len - 1] = '\0';
+                  && tmp_path[_len - 1] == PATH_DEFAULT_SLASH_C())
+                     tmp_path[_len - 1] = '\0';
 
             firmware_info.directory.system = tmp_path;
          }
@@ -2932,19 +2933,8 @@ void MainWindow::loadContent(const QHash<QString, QString> &contentHash)
 
    /* Add lpl extension to db_name, if required */
    if (!string_is_empty(content_db_name))
-   {
-      size_t _len     = strlcpy(content_db_name_full, content_db_name,
-             sizeof(content_db_name_full));
-      const char *ext = path_get_extension(content_db_name_full);
-
-      if (      string_is_empty(ext)
-            || !string_is_equal_noncase(ext,
-                FILE_PATH_LPL_EXTENSION_NO_DOT))
-         strlcpy(
-               content_db_name_full         + _len,
-               FILE_PATH_LPL_EXTENSION,
-               sizeof(content_db_name_full) - _len);
-   }
+      fill_pathname(content_db_name_full, content_db_name,
+            ".lpl", sizeof(content_db_name_full));
 
    content_info.argc                   = 0;
    content_info.argv                   = NULL;
@@ -5279,16 +5269,14 @@ void LoadCoreWindow::onLoadCustomCoreClicked()
    size_t _len;
    QString path;
    QByteArray pathArray;
-   char core_ext[16];
    char filters[128];
    const char *pathData          = NULL;
    settings_t *settings          = config_get_ptr();
    const char *path_dir_libretro = settings->paths.directory_libretro;
 
-   frontend_driver_get_core_extension(core_ext, sizeof(core_ext));
 
    _len  = strlcpy(filters, "Cores (*.", sizeof(filters));
-   _len += strlcpy(filters + _len, core_ext,     sizeof(filters) - _len);
+   _len += frontend_driver_get_core_extension(filters + _len, sizeof(filters) - _len);
    strlcpy(filters + _len, ");;All Files (*.*)", sizeof(filters) - _len);
 
    path                          = QFileDialog::getOpenFileName(

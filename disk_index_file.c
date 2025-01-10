@@ -204,7 +204,7 @@ bool disk_index_file_init(
       const char *content_path,
       const char *dir_savefile)
 {
-   size_t len;
+   size_t _len;
    char content_name[NAME_MAX_LENGTH];
    char disk_index_file_dir[DIR_MAX_LENGTH];
 
@@ -235,24 +235,22 @@ bool disk_index_file_init(
    }
 
    /* > Create directory, if required */
-   if (!path_is_directory(disk_index_file_dir))
+   if (     !path_is_directory(disk_index_file_dir)
+         && !path_mkdir(disk_index_file_dir))
    {
-      if (!path_mkdir(disk_index_file_dir))
-      {
-         RARCH_ERR(
-               "[disk index file] failed to create directory for disk index file: %s\n",
-               disk_index_file_dir);
-         goto error;
-      }
+      RARCH_ERR(
+            "[disk index file] failed to create directory for disk index file: %s\n",
+            disk_index_file_dir);
+      goto error;
    }
 
    /* > Generate final path */
-   len = fill_pathname_join_special(
+   _len = fill_pathname_join_special(
          disk_index_file->file_path, disk_index_file_dir,
          content_name, sizeof(disk_index_file->file_path));
-   strlcpy(disk_index_file->file_path       + len,
+   strlcpy(disk_index_file->file_path       + _len,
          ".ldci",
-         sizeof(disk_index_file->file_path) - len);
+         sizeof(disk_index_file->file_path) - _len);
 
    /* All is well - reset disk_index_file_t and
     * attempt to load values from file */

@@ -727,6 +727,30 @@ MSG_HASH(
    "SDL2 지원"
    )
 MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_D3D8_SUPPORT,
+   "Direct3D 8 지원"
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_D3D9_SUPPORT,
+   "Direct3D 9 지원"
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_D3D10_SUPPORT,
+   "Direct3D 10 지원"
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_D3D11_SUPPORT,
+   "Direct3D 11 지원"
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_D3D12_SUPPORT,
+   "Direct3D 12 지원"
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_GDI_SUPPORT,
+   "GDI 지원"
+   )
+MSG_HASH(
    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_VULKAN_SUPPORT,
    "Vulkan 지원"
    )
@@ -807,6 +831,10 @@ MSG_HASH(
    "PulseAudio 지원"
    )
 MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_PIPEWIRE_SUPPORT,
+   "PipeWire 지원"
+   )
+MSG_HASH(
    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_COREAUDIO_SUPPORT,
    "CoreAudio 지원"
    )
@@ -885,6 +913,10 @@ MSG_HASH(
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_V4L2_SUPPORT,
    "Video4Linux2 지원"
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_SSL_SUPPORT,
+   "SSL 지원"
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_LIBUSB_SUPPORT,
@@ -1750,6 +1782,10 @@ MSG_HASH(
    "PulseAudio 드라이버입니다. 시스템이 PulseAudio를 사용할 경우, ALSA 등의 드라이버 대신 반드시 이 드라이버를 사용해야 합니다."
    )
 MSG_HASH(
+   MENU_ENUM_LABEL_HELP_AUDIO_DRIVER_PIPEWIRE,
+   "PipeWire 드라이버입니다. 시스템이 PipeWire를 사용하는 경우, 예를 들어 PulseAudio 대신 이 드라이버를 사용해야 합니다."
+   )
+MSG_HASH(
    MENU_ENUM_LABEL_HELP_AUDIO_DRIVER_JACK,
    "Jack Audio Connection Kit 드라이버입니다."
    )
@@ -2535,7 +2571,7 @@ MSG_HASH(
    )
 MSG_HASH(
    MENU_ENUM_SUBLABEL_VIDEO_SCALE_INTEGER_AXIS,
-   "화면 크기를 조정할 때 기준을 높이로 할지, 높이와 너비 모두로 할지 설정합니다. 고해상도 영상에는 절반 단위 조정도 적용됩니다."
+   "화면 크기를 조정할 때 기준을 높이로 할지, 너비로 할지, 높이와 너비 모두로 할지 설정합니다. 절반 단위 조정은 고해상도 영상에만 적용됩니다."
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_VIDEO_SCALE_INTEGER_SCALING,
@@ -3035,6 +3071,10 @@ MSG_HASH(
    MENU_ENUM_LABEL_VALUE_AUDIO_LATENCY,
    "오디오 지연 (ms)"
    )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_AUDIO_LATENCY,
+   "최대 오디오 지연 시간 밀리초 입니다. 드라이버는 실제 지연 시간을 이 값의 50%로 유지하려고 합니다. 오디오 드라이버가 주어진 지연 시간을 제공할 수 없는 경우 적용되지 않을 수 있습니다."
+   )
 
 #ifdef HAVE_MICROPHONE
 /* Settings > Audio > Input */
@@ -3253,23 +3293,23 @@ MSG_HASH(
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_AUDIO_STREAM_STATE_NONE,
-   "상태 : 사용불가"
+   "상태: 사용 불가"
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_AUDIO_STREAM_STATE_STOPPED,
-   "상태 : 정지됨"
+   "상태: 정지됨"
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_AUDIO_STREAM_STATE_PLAYING,
-   "상태 : 재생 중"
+   "상태: 재생 중"
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_AUDIO_STREAM_STATE_PLAYING_LOOPED,
-   "상태 : 재생 중 (반복)"
+   "상태: 재생 중 (반복)"
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_AUDIO_STREAM_STATE_PLAYING_SEQUENTIAL,
-   "상태 : 재생 중 (순차)"
+   "상태: 재생 중 (순차)"
    )
 
 /* Settings > Audio > Menu Sounds */
@@ -5363,12 +5403,24 @@ MSG_HASH(
    "전면 버튼이 겹치는 부분의 크기를 조절합니다. 100%로 설정하면 8방향 구역의 크기가 모두 같아집니다."
    )
 MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_ANALOG_RECENTER_ZONE,
+   "아날로그 중심점 재정의 구역 범위"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_ANALOG_RECENTER_ZONE,
+   "지정한 구역 내에서 터치를 시작할 경우 처음 터치한 위치를 아날로그 스틱 입력의 중심점으로 사용합니다."
+   )
+MSG_HASH(
    MENU_ENUM_LABEL_VALUE_OVERLAY,
    "오버레이"
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_OVERLAY_AUTOLOAD_PREFERRED,
    "선호 오버레이 자동 불러오기"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_OVERLAY_AUTOLOAD_PREFERRED,
+   "기본 사전 설정으로 돌아가기 전에 시스템 이름에 따라 오버레이를 로드하는 것을 선호합니다. 오버레이 사전 설정에 대한 오버라이드가 설정된 경우 무시됩니다."
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_OVERLAY_OPACITY,
@@ -12148,6 +12200,10 @@ MSG_HASH(
    "타이틀"
    )
 MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_QT_THUMBNAIL_LOGO,
+   "로고"
+   )
+MSG_HASH(
    MENU_ENUM_LABEL_VALUE_QT_ALL_PLAYLISTS,
    "전체 실행목록"
    )
@@ -14886,10 +14942,6 @@ MSG_HASH(
 MSG_HASH(
    MSG_CHEEVOS_HARDCORE_PAUSED_MANUAL_FRAME_DELAY,
    "하드코어 일시정지됨. 수동 프레임 지연 설정은 허용되지 않습니다."
-   )
-MSG_HASH(
-   MSG_CHEEVOS_HARDCORE_PAUSED_SHADER_SUBFRAMES,
-   "하드코어 일시정지됨. 서브프레임 셰이더는 허용되지 않습니다."
    )
 MSG_HASH(
    MSG_CHEEVOS_HARDCORE_PAUSED_VSYNC_SWAP_INTERVAL,

@@ -915,6 +915,10 @@ MSG_HASH(
    "Падтрымка Video4Linux2"
    )
 MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_SSL_SUPPORT,
+   "Падтрымка SSL"
+   )
+MSG_HASH(
    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_LIBUSB_SUPPORT,
    "Падтрымка libusb"
    )
@@ -2563,7 +2567,7 @@ MSG_HASH(
    )
 MSG_HASH(
    MENU_ENUM_SUBLABEL_VIDEO_SCALE_INTEGER_AXIS,
-   "Змяняць маштаб толькі па вышыні або як па вышыні, так і па шырыні. Паўкрокі прымяняюцца да крыніц з высокай раздзяляльнасцю."
+   "Змяняць маштаб па вышыні ці па шырыні, або адразу па вышыні ды шырыні. Паўкрокі ўжываюцца толькі на крыніцах з высокай раздзяляльнасцю."
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_VIDEO_SCALE_INTEGER_SCALING,
@@ -4285,7 +4289,7 @@ MSG_HASH(
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_INPUT_BIND_DEFAULT_ALL,
-   "Скінуць да прадвызначанага кіравання"
+   "Скінуць да прадвызначанага"
    )
 MSG_HASH(
    MENU_ENUM_SUBLABEL_INPUT_BIND_DEFAULTS,
@@ -5187,7 +5191,7 @@ MSG_HASH(
    )
 MSG_HASH(
    MENU_ENUM_SUBLABEL_VIDEO_POST_FILTER_RECORD,
-   "Захопліваць малюнак пасля прымянення фільтраў (але не шэйдараў). Запісанае відэа будзе выглядаць гэтак жа, як на экране."
+   "Захопліваць выяву пасля ўжывання фільтраў (але не шэйдараў). Запісанае відэа будзе выглядаць гэтак жа, як на экране."
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_VIDEO_GPU_RECORD,
@@ -5195,7 +5199,7 @@ MSG_HASH(
    )
 MSG_HASH(
    MENU_ENUM_SUBLABEL_VIDEO_GPU_RECORD,
-   "Калі падтрымліваецца, запісваць малюнак пасля апрацоўкі GPU."
+   "Пры магчымасці запісваць выяву пасля апрацоўкі графічным працэсарам."
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_STREAMING_MODE,
@@ -5385,6 +5389,14 @@ MSG_HASH(
 MSG_HASH(
    MENU_ENUM_SUBLABEL_INPUT_OVERLAY_ABXY_DIAGONAL_SENSITIVITY,
    "Настройка памеру зон перакрыцця для блока кнопак. Усталюйце на 100% для сіметрыі па 8 напрамках."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_ANALOG_RECENTER_ZONE,
+   "Зона перацэнтроўкі аналагавага ўвода"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_ANALOG_RECENTER_ZONE,
+   "Увод аналагавы стыку будзе адлічвацца адносна першага дотыку пры націсканні ў гэтай зоне."
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_OVERLAY,
@@ -12172,6 +12184,10 @@ MSG_HASH(
    "Тытульны экран"
    )
 MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_QT_THUMBNAIL_LOGO,
+   "Лагатып"
+   )
+MSG_HASH(
    MENU_ENUM_LABEL_VALUE_QT_ALL_PLAYLISTS,
    "Усе плэй-лісты"
    )
@@ -14910,10 +14926,6 @@ MSG_HASH(
 MSG_HASH(
    MSG_CHEEVOS_HARDCORE_PAUSED_MANUAL_FRAME_DELAY,
    "Хардкод прыпынены. Налада ручной затрымкі кадраў не дазваляецца."
-   )
-MSG_HASH(
-   MSG_CHEEVOS_HARDCORE_PAUSED_SHADER_SUBFRAMES,
-   "Хардкор прыпынены. Падкадры шэйдара не дазваляюцца."
    )
 MSG_HASH(
    MSG_CHEEVOS_HARDCORE_PAUSED_VSYNC_SWAP_INTERVAL,
