@@ -1956,7 +1956,7 @@ MSG_HASH(
    )
 MSG_HASH(
    MENU_ENUM_SUBLABEL_VIDEO_BLACK_FRAME_INSERTION,
-   "Karelerin arasına siyah kareler ekleyin. CRT tarama çıkışını taklit ederek hareket bulanıklığını büyük ölçüde azaltabilir, ancak parlaklık azalabilir. Değiştirme Aralığı > 1, alt-kareler, Kare Gecikmesi veya Tam İçerik Kare Hızına Eşitleme ile birleştirmeyin."
+   "UYARI: Hızlı titreme bazı ekranlarda görüntünün kalıcı olmasına neden olabilir. Kullanım riski size aittir // Karelerin arasına siyah kareler ekleyin. CRT tarama çıkışını taklit ederek hareket bulanıklığını büyük ölçüde azaltabilir, ancak parlaklık pahasına."
    )
 MSG_HASH(
    MENU_ENUM_LABEL_HELP_VIDEO_BLACK_FRAME_INSERTION,
@@ -2040,7 +2040,7 @@ MSG_HASH(
    )
 MSG_HASH(
    MENU_ENUM_SUBLABEL_VIDEO_SHADER_SUBFRAMES,
-   "Kareler arasına fazladan gölgelendirici kareler ekleyin. Gölgelendiricilerin gerçek içerik hızından daha yüksek bir fps hızında çalışan efektler oluşturmasına olanak tanır. Mevcut ekran Hz değerine ayarlanmalıdır. Takas Aralığı > 1, BFI, Kare Gecikmesi veya Tam İçerik Kare Hızına Eşitle ile birleştirmeyin."
+   "UYARI: Hızlı titreme bazı ekranlarda görüntünün kalıcı olmasına neden olabilir. Kullanım riski size aittir // Ekranı dikey olarak bölerek ve ekranın her bir bölümünü kaç alt kare olduğuna göre işleyerek birden fazla alt kare üzerinde temel bir dönen tarama çizgisini taklit eder."
    )
 MSG_HASH(
    MENU_ENUM_LABEL_HELP_VIDEO_SHADER_SUBFRAMES,
@@ -2116,7 +2116,7 @@ MSG_HASH(
    )
 MSG_HASH(
    MENU_ENUM_SUBLABEL_VIDEO_SCAN_SUBFRAMES,
-   "Ekranı dikey olarak böler ve ekranın her bir bölümünü kaç alt kare olduğuna göre işleyerek birden fazla alt kare üzerinde temel bir dönen tarama çizgisini taklit eder."
+   "UYARI: Hızlı titreme bazı ekranlarda görüntünün kalıcı olmasına neden olabilir. Kullanım riski size aittir // Ekranı dikey olarak bölerek ve ekranın her bir bölümünü kaç alt kare olduğuna göre işleyerek birden fazla alt kare üzerinde temel bir dönen tarama çizgisini taklit eder."
    )
 MSG_HASH(
    MENU_ENUM_LABEL_HELP_VIDEO_SCAN_SUBFRAMES,
@@ -4805,7 +4805,7 @@ MSG_HASH(
    )
 MSG_HASH(
    MENU_ENUM_SUBLABEL_SAVESTATE_AUTO_SAVE,
-   "İçerik kapatıldığında otomatik olarak durum kaydı oluşturur. 'Durumu Otomatik Olarak Yükle' etkinse RetroArch bu durum kaydını otomatik olarak yükler."
+   "İçerik kapatıldığında otomatik durum kaydı oluşturun. 'Otomatik Durum Yükleme' etkinse, bu durum kaydı başlangıçta yüklenir."
    )
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_SAVESTATE_AUTO_LOAD,
@@ -13484,10 +13484,6 @@ MSG_HASH(
    "Otomatik algıla"
    )
 MSG_HASH(
-   MSG_AUTOLOADING_SAVESTATE_FROM,
-   "Durum kaydından otomatik yükle"
-   )
-MSG_HASH(
    MSG_CAPABILITIES,
    "Yetenekler"
    )
@@ -14578,6 +14574,10 @@ MSG_HASH(
 MSG_HASH(
    MSG_VIRTUAL_DISK_TRAY_CLOSE,
    "Sanal disk tepsisi kapatılamadı."
+   )
+MSG_HASH(
+   MSG_AUTOLOADING_SAVESTATE_FROM,
+   "Durum kaydından otomatik yükle"
    )
 MSG_HASH(
    MSG_AUTOLOADING_SAVESTATE_FAILED,
