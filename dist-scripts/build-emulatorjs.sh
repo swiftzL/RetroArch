@@ -66,6 +66,7 @@ largeHeap=("mupen64plus_next" "picodrive" "pcsx_rearmed" "genesis_plus_gx" "medn
 needsGles3=("ppsspp")
 needsThreads=("ppsspp")
 largeThreads=("ppsspp")
+noCHD=("mame2003" "mame2003-plus")
 
 for f in $(ls -v *_emscripten.bc); do
   name=`echo "$f" | sed "s/\(_libretro_emscripten\|\).bc$//"`
@@ -75,6 +76,7 @@ for f in $(ls -v *_emscripten.bc); do
   stack_mem=8388608 # 8mb
   heap_mem=268435456 # 256mb
   pthread=0
+  chd=1
 
   if [ "$LEGACY" = "YES" ]; then
     gles3=0
@@ -98,6 +100,9 @@ for f in $(ls -v *_emscripten.bc); do
     echo "$name"' requires threads! Please build with --threads! Exiting...'
     exit 1
   fi
+  if [[ $(containsElement $name "${noCHD[@]}") = 1 ]]; then
+    chd=0
+  fi
   if [[ $(containsElement $name "${largeThreads[@]}") = 1 ]]; then
     pthread=32
   fi
@@ -120,6 +125,7 @@ for f in $(ls -v *_emscripten.bc); do
   echo GLES3: $gles3
   echo STACK_MEMORY: $stack_mem
   echo HEAP_MEMORY: $heap_mem
+  echo HAVE_CHD: $chd
 
   if [[ "$CLEAN" = "YES" ]]; then
     if [ $lastGles != $gles3 ] ; then
@@ -129,8 +135,8 @@ for f in $(ls -v *_emscripten.bc); do
   lastGles=$gles3
 
   # Compile core
-  echo "BUILD COMMAND: make -C ../ -f Makefile.emscripten PTHREAD=$pthread ASYNC=$async WASM=$wasm HAVE_OPENGLES3=$gles3 STACK_MEMORY=$stack_mem HEAP_MEMORY=$heap_mem -j7 TARGET=${name}_libretro.js"
-  make -C ../ -f Makefile.emscripten PTHREAD=$pthread ASYNC=$async WASM=$wasm HAVE_OPENGLES3=$gles3 STACK_MEMORY=$stack_mem HEAP_MEMORY=$heap_mem TARGET=${name}_libretro.js -j$(nproc) || exit 1
+  echo "BUILD COMMAND: make -C ../ -f Makefile.emscripten HAVE_CHD=$chd PTHREAD=$pthread ASYNC=$async WASM=$wasm HAVE_OPENGLES3=$gles3 STACK_MEMORY=$stack_mem HEAP_MEMORY=$heap_mem TARGET=${name}_libretro.js -j"$(nproc)
+  make -C ../ -f Makefile.emscripten HAVE_CHD=$chd PTHREAD=$pthread ASYNC=$async WASM=$wasm HAVE_OPENGLES3=$gles3 STACK_MEMORY=$stack_mem HEAP_MEMORY=$heap_mem TARGET=${name}_libretro.js -j$(nproc) || exit 1
 
   # Move executable files
   out_dir="../../EmulatorJS/data/cores"
