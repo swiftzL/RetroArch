@@ -15,13 +15,8 @@
 
 #include <stdint.h>
 
-#ifdef EMULATORJS
-#include <7zip/LzmaEnc.h>
-#include <7zip/LzmaDec.h>
-#else
 #include <LzmaEnc.h>
 #include <LzmaDec.h>
-#endif
 
 #include <libchdr/libchdr_zlib.h>
 
