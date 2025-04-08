@@ -5986,7 +5986,7 @@ void emscripten_mainloop(void)
       }
    }
 
-   ret = runloop_iterate();
+   ret = runloop_iterate();//主循环和任务队列
 
    task_queue_check();
 

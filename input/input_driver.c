@@ -6402,7 +6402,7 @@ void input_driver_poll(void)
       float input_analog_deadzone        = settings->floats.input_analog_deadzone;
       float input_analog_sensitivity     = settings->floats.input_analog_sensitivity;
 
-      for (i = 0; i < max_users; i++)
+      for (i = 0; i < max_users; i++)//多个用户 实际上这里处理一个用户就行 多个玩家可以通过不用按键隔离 
       {
          input_bits_t current_inputs;
          unsigned mapped_port            = settings->uints.input_remap_ports[i];
@@ -6701,7 +6701,7 @@ void input_driver_poll(void)
    }
 #endif
 
-#ifdef HAVE_NETWORKGAMEPAD
+#ifdef HAVE_NETWORKGAMEPAD 网络手柄
    /* Poll remote */
    if (input_st->remote)
    {

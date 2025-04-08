@@ -8687,9 +8687,9 @@ static void netplay_post_frame(netplay_t *netplay)
       netplay_sync_input_post_frame(netplay, false);
    }
 
-   for (i = 0; i < netplay->connections_size; i++)
+   for (i = 0; i < netplay->connections_size; i++)//连接数量 
    {
-      struct netplay_connection *connection = &netplay->connections[i];
+      struct netplay_connection *connection = &netplay->connections[i];//这里不需要用
       if (   (connection->flags & NETPLAY_CONN_FLAG_ACTIVE)
           && !netplay_send_flush(
              &connection->send_packet_buffer, connection->fd,

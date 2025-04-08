@@ -7787,7 +7787,7 @@ void core_reset(void)
    runloop_st->current_core.retro_reset();
 }
 
-void core_run(void)
+void core_run(void)//核心指令处理
 {
    runloop_state_t *runloop_st = &runloop_state;
    struct retro_core_t *
@@ -7799,7 +7799,7 @@ void core_run(void)
       : current_core->poll_type;
    bool early_polling          = new_poll_type == POLL_TYPE_EARLY;
    bool late_polling           = new_poll_type == POLL_TYPE_LATE;
-#ifdef HAVE_NETWORKING
+#ifdef HAVE_NETWORKING //开启网络
    bool netplay_preframe       = netplay_driver_ctl(
          RARCH_NETPLAY_CTL_PRE_FRAME, NULL);
 
@@ -7813,8 +7813,8 @@ void core_run(void)
    }
 #endif
 
-   if (early_polling)
-      input_driver_poll();
+   if (early_polling)//是否提前tik逻辑
+      input_driver_poll(); //要处理下网络frame
    else if (late_polling)
       current_core->flags &= ~RETRO_CORE_FLAG_INPUT_POLLED;
 
@@ -7825,7 +7825,11 @@ void core_run(void)
       input_driver_poll();
 
 #ifdef HAVE_NETWORKING
-   netplay_driver_ctl(RARCH_NETPLAY_CTL_POST_FRAME, NULL);
+   netplay_driver_ctl(RARCH_NETPLAY_CTL_POST_FRAME, NULL);//tik完了同步网络帧
+#endif
+
+#ifdef HAVE_WSNETWORKING 同步下玩家输入
+   //send fram
 #endif
 }
 
