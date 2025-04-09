@@ -100,7 +100,7 @@ typedef struct
    uint32_t data[8];
    uint16_t analogs[8];
    uint16_t analog_buttons[16];
-} input_bits_t;
+} input_bits_t;//输入bits
 
 typedef struct input_mapper
 {

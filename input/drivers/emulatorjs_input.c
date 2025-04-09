@@ -648,12 +648,12 @@ static int16_t rwebinput_input_state(
       const retro_keybind_set *binds,
       bool keyboard_mapping_blocked,
       unsigned port,
-      unsigned device,
+      unsigned device,//设备
       unsigned idx,
       unsigned id)
 {
    rwebinput_input_t *rwebinput = (rwebinput_input_t*)data;
-
+   printf("读取状态中 当前帧 %d\n",get_emscripten_frame_count()); //这里去hookret
    switch (device)
    {
       case RETRO_DEVICE_JOYPAD:
@@ -661,7 +661,7 @@ static int16_t rwebinput_input_state(
          {
             unsigned i;
             int16_t ret = 0;
-            for (i = 0; i < RARCH_FIRST_CUSTOM_BIND; i++)
+            for (i = 0; i < RARCH_FIRST_CUSTOM_BIND; i++)//绑定的16个键位
             {
                if (binds[port][i].valid || is_pressed_hehe(port, i))
                {

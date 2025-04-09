@@ -154,6 +154,8 @@ void retroarch_favorites_init(void);
 
 void retroarch_favorites_deinit(void);
 
+unsigned get_emscripten_frame_count();
+
 /* Audio */
 
 /**

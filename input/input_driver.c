@@ -5508,7 +5508,7 @@ static bool input_keys_pressed_other_sources(
  *
  * Grab an input sample for this frame.
  */
-static void input_keys_pressed(
+static void input_keys_pressed(//键盘key
       unsigned port,
       bool is_menu,
       unsigned input_hotkey_block_delay,
@@ -6289,7 +6289,7 @@ bool replay_set_serialized_data(void* buf)
 }
 #endif
 
-void input_driver_poll(void)
+void input_driver_poll(void) //输入驱动
 {
    size_t i, j;
    rarch_joypad_info_t joypad_info[MAX_USERS];
@@ -6406,7 +6406,7 @@ void input_driver_poll(void)
       {
          input_bits_t current_inputs;
          unsigned mapped_port            = settings->uints.input_remap_ports[i];
-         unsigned device                 = settings->uints.input_libretro_device[mapped_port]
+         unsigned device                 = settings->uints.input_libretro_device[mapped_port]//不同用户的设备不一样
                                            & RETRO_DEVICE_MASK;
          input_bits_t *p_new_state       = (input_bits_t*)&current_inputs;
          unsigned input_analog_dpad_mode = settings->uints.input_analog_dpad_mode[i];
@@ -6433,7 +6433,7 @@ void input_driver_poll(void)
             case RETRO_DEVICE_KEYBOARD:
             case RETRO_DEVICE_JOYPAD:
             case RETRO_DEVICE_ANALOG:
-               BIT256_CLEAR_ALL_PTR(&current_inputs);
+               BIT256_CLEAR_ALL_PTR(&current_inputs);//键盘手柄
                if (joypad)
                {
                   unsigned k, j;
@@ -7046,8 +7046,8 @@ void input_remapping_set_defaults(bool clear_cache)
 void input_driver_collect_system_input(input_driver_state_t *input_st,
       settings_t *settings, input_bits_t *current_bits)
 {
-   int port;
-   rarch_joypad_info_t joypad_info;
+   int port;//用于遍历端口
+   rarch_joypad_info_t joypad_info;//手柄信息
    unsigned block_delay                = settings->uints.input_hotkey_block_delay;
    const input_device_driver_t *joypad = input_st->primary_joypad;
 #ifdef HAVE_MFI
@@ -7070,7 +7070,7 @@ void input_driver_collect_system_input(input_driver_state_t *input_st,
    joypad_info.axis_threshold          = settings->floats.input_axis_threshold;
 
    /* Gather input from each (enabled) joypad */
-   for (port = 0; port < (int)max_users; port++)
+   for (port = 0; port < (int)max_users; port++)//遍历每个用户端口
    {
       const struct retro_keybind *binds_norm = &input_config_binds[port][RARCH_ENABLE_HOTKEY];
       const struct retro_keybind *binds_auto = &input_autoconf_binds[port][RARCH_ENABLE_HOTKEY];
@@ -7156,7 +7156,7 @@ void input_driver_collect_system_input(input_driver_state_t *input_st,
             joypad,
             sec_joypad,
             &joypad_info,
-            settings);
+            settings);//检测keys
 
 #ifdef HAVE_MENU
       if (menu_is_alive)

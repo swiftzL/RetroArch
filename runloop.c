@@ -5503,7 +5503,7 @@ static enum runloop_state_enum runloop_check_state(
    if (input_st->flags & INP_FLAG_KB_MAPPING_BLOCKED)
       input_st->flags |= INP_FLAG_BLOCK_HOTKEY;
 
-   input_driver_collect_system_input(input_st, settings, &current_bits);
+   input_driver_collect_system_input(input_st, settings, &current_bits);//收集驱动输入 
 
 #ifdef HAVE_MENU
    last_input                       = current_bits;

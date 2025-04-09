@@ -136,7 +136,7 @@ for f in $(ls -v *_emscripten.bc); do
 
   # Compile core
   echo "BUILD COMMAND: make -C ../ -f Makefile.emscripten HAVE_CHD=$chd PTHREAD=$pthread ASYNC=$async WASM=$wasm HAVE_OPENGLES3=$gles3 STACK_MEMORY=$stack_mem HEAP_MEMORY=$heap_mem TARGET=${name}_libretro.js -j"$(nproc)
-  make -C ../ -f Makefile.emscripten HAVE_CHD=$chd PTHREAD=$pthread ASYNC=$async WASM=$wasm HAVE_OPENGLES3=$gles3 STACK_MEMORY=$stack_mem HEAP_MEMORY=$heap_mem TARGET=${name}_libretro.js -j$(nproc) || exit 1
+  make -C ../ -f Makefile.emscripten GENERATE_SOURCEMAP=1 HAVE_CHD=$chd PTHREAD=$pthread ASYNC=$async WASM=$wasm HAVE_OPENGLES3=$gles3 STACK_MEMORY=$stack_mem HEAP_MEMORY=$heap_mem TARGET=${name}_libretro.js -j$(nproc) || exit 1
 
   # Move executable files
   out_dir="../../EmulatorJS/data/cores"

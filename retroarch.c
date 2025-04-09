@@ -5930,9 +5930,12 @@ bool EJS_MAINLOOP_PAUSED = false;
 bool EJS_PENDING_SCREENSHOT = false;
 void ejs_check_save(void);
 #endif
-static unsigned emscripten_frame_count = 0;
+static volatile unsigned emscripten_frame_count = 0;
 
-void emscripten_mainloop(void)
+unsigned  get_emscripten_frame_count(){
+   return emscripten_frame_count;
+}
+void emscripten_mainloop(void)//主循环
 {
 #ifdef EMULATORJS
    if (EJS_PENDING_SCREENSHOT) {
