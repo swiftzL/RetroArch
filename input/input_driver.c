@@ -5551,7 +5551,7 @@ static void input_keys_pressed(//键盘key
             binds,
             (input_st->flags & INP_FLAG_KB_MAPPING_BLOCKED) ? true : false,
             port, RETRO_DEVICE_JOYPAD, 0,
-            RARCH_ENABLE_HOTKEY))
+            RARCH_ENABLE_HOTKEY))//设备热键检查 手柄
       {
          if (input_st->input_hotkey_block_counter < input_hotkey_block_delay)
             input_st->input_hotkey_block_counter++;

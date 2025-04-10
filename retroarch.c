@@ -5930,13 +5930,16 @@ bool EJS_MAINLOOP_PAUSED = false;
 bool EJS_PENDING_SCREENSHOT = false;
 void ejs_check_save(void);
 #endif
-static volatile unsigned emscripten_frame_count = 0;
+static unsigned emscripten_frame_count = 0;
 
 unsigned  get_emscripten_frame_count(){
    return emscripten_frame_count;
 }
 void emscripten_mainloop(void)//主循环
 {
+
+   //这里可以开始插帧
+
 #ifdef EMULATORJS
    if (EJS_PENDING_SCREENSHOT) {
       const char *path = "/screenshot.png";
@@ -5990,6 +5993,7 @@ void emscripten_mainloop(void)//主循环
    }
 
    ret = runloop_iterate();//主循环和任务队列
+
 
    task_queue_check();
 

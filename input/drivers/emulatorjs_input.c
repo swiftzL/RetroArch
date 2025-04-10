@@ -36,6 +36,8 @@
 #include "../../configuration.h"
 #include "../../retroarch.h"
 #include "../../verbosity.h"
+#include "../../network/ws.h"
+#include "emulatorjs_input.h"
 
 /* https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button */
 #define RWEBINPUT_MOUSE_BTNL 0
@@ -570,7 +572,8 @@ struct rwebinput_code_to_key
    int down_3;
    int down_4;
 };
-
+//数据格式0-26 状态两个字节 用这里的数据去构造一个操作视图暂时两个玩家
+//4字节帧数  4字节数据一个操作 这样3个字节搞定
 static struct rwebinput_code_to_key stuff[] =
 {
    { 0, 0, 0, 0, 0 }, //b
@@ -602,8 +605,34 @@ static struct rwebinput_code_to_key stuff[] =
    { 26, 0, 0, 0, 0 },
 };
 
+static unsigned int createPlayerCmd(int user) {
+   unsigned int res = 0;
+  for (i=0; i<ARRAY_SIZE(stuff); i++) {
+            if (user == 0) {
+                res | stuff[i].down_1 <<i;
+            } else if (user == 1) {
+                res | stuff[i].down_2 << i;
+            } else if (user == 2) {
+                res | stuff[i].down_3 << i;
+            } else if (user == 3) {
+                res = stuff[i].down_4 << i;
+            }
+            break;
+    }     
+    return res;
+}
+
+void create_all_cmd(unsigned int* arr) {
+   arr[0] = createPlayerCmd(0);
+   arr[1] = createPlayerCmd(1);
+}
+
+//这里记录是是下一帧的指令 
 void simulate_input(int user, int key, int down)
 {
+   set_is_input_flag();
+   //直接记录这里就好了 
+   //指令 4字节帧数 1字节user 1字节key 2字节down
     int i;
     for (i=0; i<ARRAY_SIZE(stuff); i++) {
         if (stuff[i].id == key) {
@@ -621,7 +650,9 @@ void simulate_input(int user, int key, int down)
     }
 }
 
+
 int is_pressed_hehe(int user, int id) {
+   
     if (id >=24) return 0;
     for (int i=0; i<ARRAY_SIZE(stuff); i++) {
         if (stuff[i].id == id) {
@@ -653,7 +684,7 @@ static int16_t rwebinput_input_state(
       unsigned id)
 {
    rwebinput_input_t *rwebinput = (rwebinput_input_t*)data;
-   printf("读取状态中 当前帧 %d\n",get_emscripten_frame_count()); //这里去hookret
+   
    switch (device)
    {
       case RETRO_DEVICE_JOYPAD:
