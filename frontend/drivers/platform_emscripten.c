@@ -46,7 +46,7 @@
 #include "../../retroarch.h"
 #include "../../verbosity.h"
 #include "../../tasks/tasks_internal.h"
-
+#include "../../input/ws.h"
 void dummyErrnoCodes(void);
 void emscripten_mainloop(void);
 
@@ -183,7 +183,14 @@ int main(int argc, char *argv[])//main function
    emscripten_set_canvas_element_size("!canvas", 800, 600);
    emscripten_set_element_css_size("!canvas", 800.0, 600.0);
 #endif
-   emscripten_set_main_loop(emscripten_mainloop, 0, 0);
+
+   if(isWs() && currentUser() !=0){
+      printf("[WS] User %d\n", currentUser());
+   }else{
+     emscripten_set_main_loop(emscripten_mainloop, 0, 0);
+   }
+   
+
    rarch_main(argc, argv, NULL);
 
    return 0;

@@ -201,7 +201,8 @@
 #endif
 #include "tasks/task_content.h"
 #include "tasks/tasks_internal.h"
-
+#include "input/ws.h"
+#include "input/drivers/emulatorjs_input.h"
 #include "version.h"
 #include "version_git.h"
 
@@ -5933,12 +5934,25 @@ void ejs_check_save(void);
 static unsigned emscripten_frame_count = 0;
 
 unsigned  get_emscripten_frame_count(){
+
    return emscripten_frame_count;
+}
+
+
+void recover_frame(unsigned char* frame) {
+   if(frame== NULL) {
+      return;
+   }
+   unsigned int num = byteArrayToInt(frame+4);
+   if(num == 1) {
+      recoverCmd(1,byteArrayToInt(frame+8));
+   }else{
+      recoverCmd(1,byteArrayToInt(frame+8));
+      recoverCmd(1,byteArrayToInt(frame+12));
+   }
 }
 void emscripten_mainloop(void)//主循环
 {
-
-   //这里可以开始插帧
 
 #ifdef EMULATORJS
    if (EJS_PENDING_SCREENSHOT) {
@@ -5974,6 +5988,19 @@ void emscripten_mainloop(void)//主循环
 
    emscripten_frame_count++;
 
+     //这里可以开始插帧
+   //开始发送当前帧操作
+   unsigned int current_cmds[2];
+   create_all_cmd(current_cmds);
+   ws_sync(emscripten_frame_count,currentUser(),current_cmds,2);
+   if(isWs()) {
+      //insert frame op
+      unsigned char* f = get_frame(emscripten_frame_count);
+      recover_frame(f);
+   }
+   
+   //当前帧是不是有操作 然后一帧跑完
+   
    /* Disable BFI during fast forward, slow-motion,
     * and pause to prevent flicker. */
    if (
@@ -6002,6 +6029,16 @@ void emscripten_mainloop(void)//主循环
 
    main_exit(NULL);
    emscripten_force_exit(0);
+}
+
+void exec_frame(void) {
+   while(true) {
+   unsigned char* f = get_frame(get_emscripten_frame_count());
+   if (f == NULL) {
+      return;
+   }
+   emscripten_mainloop();
+   }
 }
 
 #ifdef EMULATORJS

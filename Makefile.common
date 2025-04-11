@@ -793,6 +793,7 @@ ifeq ($(HAVE_EMSCRIPTEN), 1)
 endif
 ifeq ($(EMULATORJS), 1)
    OBJ += input/drivers/emulatorjs_input.o
+   OBJ += input/ws.o
 endif
 
 ifeq ($(HAVE_BLUETOOTH), 1)

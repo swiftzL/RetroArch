@@ -8,4 +8,6 @@ void simulate_input(int user, int key, int down);
 
 void create_all_cmd(unsigned int* arr);
 
+void recoverCmd(int user,unsigned cmd);
+
 #endif

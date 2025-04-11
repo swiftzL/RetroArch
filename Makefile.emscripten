@@ -64,7 +64,7 @@ ASYNC ?= 0
 PTHREAD ?= 0
 LTO ?= 0
 WASM ?= 1
-DEBUG ?= 1
+DEBUG ?= 0
 
 DEFINES := -DRARCH_INTERNAL -DHAVE_MAIN
 DEFINES += -DEMSCRIPTEN_FIXME -DHAVE_FILTERS_BUILTIN -DNO_MISSING_ASSET_WARNING -DNO_AUTO_CANVAS_RESIZE -DWEB_SCALING -DNO_CANVAS_FULLSCREEN -DNO_INITIAL_CANVAS_RESIZE -DEMULATORJS
@@ -118,7 +118,7 @@ endif
 LIBS    := -s USE_ZLIB=1
 
 LDFLAGS := -L. --no-heap-copy $(LIBS) -s TOTAL_STACK=$(STACK_MEMORY) -s TOTAL_MEMORY=$(HEAP_MEMORY) -s NO_EXIT_RUNTIME=1 -s EXPORTED_RUNTIME_METHODS="['callMain', 'cwrap', 'getValue', 'FS', 'PATH', 'ERRNO_CODES', 'AL', 'abort']" \
-           -s EXPORTED_FUNCTIONS=['_main','_malloc','_load_state','_ejs_set_variable','_simulate_input','_shader_enable','_save_state_info','_set_cheat','_cmd_take_screenshot','_system_restart','_cmd_savefiles','_get_core_options','_cmd_save_state','_supports_states','_reset_cheat','_toggleMainLoop','_save_file_path','_get_disk_count','_set_current_disk','_get_current_disk','_refresh_save_files','_toggle_fastforward','_set_ff_ratio','_toggle_slow_motion','_set_sm_ratio','_toggle_rewind','_set_rewind_granularity','_get_current_frame_count','_ejs_set_keyboard_enabled','_set_vsync','_set_video_rotation'] \
+           -s EXPORTED_FUNCTIONS=['_reciveWsCmds','_set_current_user','_main','_malloc','_load_state','_ejs_set_variable','_simulate_input','_shader_enable','_save_state_info','_set_cheat','_cmd_take_screenshot','_system_restart','_cmd_savefiles','_get_core_options','_cmd_save_state','_supports_states','_reset_cheat','_toggleMainLoop','_save_file_path','_get_disk_count','_set_current_disk','_get_current_disk','_refresh_save_files','_toggle_fastforward','_set_ff_ratio','_toggle_slow_motion','_set_sm_ratio','_toggle_rewind','_set_rewind_granularity','_get_current_frame_count','_ejs_set_keyboard_enabled','_set_vsync','_set_video_rotation'] \
            -lidbfs.js \
            -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
            -s GL_ENABLE_GET_PROC_ADDRESS=1 \
@@ -187,7 +187,7 @@ endif
 ifeq ($(GENERATE_SOURCEMAP), 1)
    CFLAGS += -g4
    CXXFLAGS += -g4
-   LDFLAGS += -g4 --source-map-base http://localhost:8000/cores/ # -gsource-map
+   LDFLAGS += -g4 --source-map-base http://localhost:8081/data/cores/ # -gsource-map
 endif
 
 include Makefile.common

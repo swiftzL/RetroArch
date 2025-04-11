@@ -36,7 +36,7 @@
 #include "../../configuration.h"
 #include "../../retroarch.h"
 #include "../../verbosity.h"
-#include "../../network/ws.h"
+#include "../../input/ws.h"
 #include "emulatorjs_input.h"
 
 /* https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button */
@@ -607,20 +607,44 @@ static struct rwebinput_code_to_key stuff[] =
 
 static unsigned int createPlayerCmd(int user) {
    unsigned int res = 0;
-  for (i=0; i<ARRAY_SIZE(stuff); i++) {
+  for (int i=0; i<ARRAY_SIZE(stuff); i++) {
             if (user == 0) {
-                res | stuff[i].down_1 <<i;
+                res | stuff[i].down_1 & 1;
             } else if (user == 1) {
-                res | stuff[i].down_2 << i;
+                res | stuff[i].down_2 & 1;
             } else if (user == 2) {
-                res | stuff[i].down_3 << i;
+                res | stuff[i].down_3 & 1;
             } else if (user == 3) {
-                res = stuff[i].down_4 << i;
+                res = stuff[i].down_4 & 1;
             }
             break;
     }     
     return res;
 }
+void setBit(unsigned int *number, int bitPosition, int value) {
+    if (value) {
+        // 设置为 1
+        *number |= (1 << bitPosition); // 使用位或操作设置指定的位
+    } else {
+        // 设置为 0
+        *number &= ~(1 << bitPosition); // 使用位与操作清除指定的位
+    }
+}
+void recoverCmd(int user,unsigned  cmd) {
+   for (int i=0; i<ARRAY_SIZE(stuff); i++) {
+            if (user == 0) {
+                 stuff[i].down_1 = (cmd >> i) & 1;
+            } else if (user == 1) {
+                stuff[i].down_2 = (cmd >> i) & 1;
+            } else if (user == 2) {
+                stuff[i].down_3 = (cmd >> i) & 1;
+            } else if (user == 3) {
+               stuff[i].down_4 = (cmd >> i) & 1;
+            }
+            break;
+    }     
+}
+
 
 void create_all_cmd(unsigned int* arr) {
    arr[0] = createPlayerCmd(0);
