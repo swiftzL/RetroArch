@@ -5944,6 +5944,7 @@ void recover_frame(unsigned char* frame) {
       return;
    }
    unsigned int num = byteArrayToInt(frame+4);
+   printf("开始恢复帧 %d num:%d\n",byteArrayToInt(frame),num);
    if(num == 1) {
       recoverCmd(1,byteArrayToInt(frame+8));
    }else{
@@ -6033,10 +6034,12 @@ void emscripten_mainloop(void)//主循环
 
 void exec_frame(void) {
    while(true) {
-   unsigned char* f = get_frame(get_emscripten_frame_count());
+       printf("开始执行 frame %d\n",get_emscripten_frame_count() +1 );
+   unsigned char* f = get_frame(get_emscripten_frame_count() + 1);
    if (f == NULL) {
       return;
    }
+  
    emscripten_mainloop();
    }
 }

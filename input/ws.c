@@ -1,4 +1,5 @@
 #include "ws.h"
+#include <emscripten.h>
 #include "drivers/emulatorjs_input.h"
 #include<stdio.h>
 #include<stdlib.h>
@@ -26,20 +27,29 @@ unsigned int byteArrayToInt(const unsigned char *byteArray) {
     value |= byteArray[3];         // 最低字节
     return value;
 }
+
+void printBytes(unsigned char* array,int size){
+    for (int i = 0; i < size; i++)
+    {
+        printf("%02x ", array[i]);
+    }
+    printf("\n");
+}
 void reciveWsCmds(unsigned char* array,int size) {
    if (array == NULL)
    {
       return;
    }
-   
+   printBytes(array,size);
    if(cmds == NULL){
        cmds = (unsigned char *)malloc(CMD_BYTES);
    }
    int currentFrame = byteArrayToInt(array);
+   printf("接收到frame:%d",currentFrame);
    if (currentFrame >= TEN_HOUR_FRAME)
    {
       return;
-   }
+   } 
    int cmd_pos = (currentFrame-1)*CMD_BYTES;
    for(int i = 0; i < size; i++) {
       cmds[cmd_pos++] = array[i];
@@ -58,7 +68,23 @@ int has_input_flag(){
    return simulate_input_flag == 1;
 }
 
-static void sendData() {
+static void sendData(unsigned char* data, int size) {
+    EM_ASM_({
+        // 创建一个 Uint8Array 视图，指向传递的内存
+        var dataView = new Uint8Array(HEAPU8.buffer, $0, $1);
+        
+        // 创建一个新的 ArrayBuffer 和复制数据
+        // 这很重要，因为 HEAPU8.buffer 会随着内存增长而变化
+        var arraybuffer = new ArrayBuffer($1);
+        var copy = new Uint8Array(arraybuffer);
+        copy.set(dataView);
+        
+        // 调用 JavaScript 函数处理 ArrayBuffer
+        window.sendFrameData(arraybuffer);
+        
+        // 如果您想要保留对 HEAPU8.buffer 的直接引用，请确保数据不会被释放
+        // 或者考虑使用下面的其他方法
+    }, data, size);
 
 }
 
@@ -83,6 +109,7 @@ void ws_sync(unsigned int frame,int user,unsigned int* cmds,int size) {
       intToByteArray(cmds[1], data + 8); //同步其他 
    }
    //send data
+   sendData(data,16);
 }
 
 unsigned char* get_frame(unsigned int frame){
